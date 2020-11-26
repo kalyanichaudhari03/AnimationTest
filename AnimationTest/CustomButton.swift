@@ -6,19 +6,20 @@
 //
 
 import UIKit
-protocol ShadowableRoundableButton {
 
+protocol ShadowableRoundableButton {
     var cornerRadius: CGFloat { get set }
-    var boarderWidth : CGFloat {get set}
-    var boarderColor : CGColor {get set}
+    var boarderWidth: CGFloat {get set}
+    var boarderColor: CGColor {get set}
     var shadowColor: UIColor { get set }
     var shadowOffsetWidth: CGFloat { get set }
     var shadowOffsetHeight: CGFloat { get set }
     var shadowOpacity: Float { get set }
     var shadowRadius: CGFloat { get set }
     var shadowLayer: CAShapeLayer { get }
-        func setCornerRadiusAndShadow()
+    func setCornerRadiusAndShadow()
 }
+
 extension ShadowableRoundableButton where Self: UIButton {
     func setCornerRadiusAndShadow() {
         layer.cornerRadius = cornerRadius
@@ -36,8 +37,10 @@ extension ShadowableRoundableButton where Self: UIButton {
         
     }
 }
+
 @IBDesignable
 class CustomButton: UIButton , ShadowableRoundableButton {
+    
     var boarderColor: CGColor = UIColor(red: 25.0/255.0, green: 206.0/255.0, blue: 251.0/255.0, alpha: 1.0).cgColor
     
     var boarderWidth: CGFloat = 1.0
@@ -46,13 +49,13 @@ class CustomButton: UIButton , ShadowableRoundableButton {
 
     var shadowOpacity: Float = 0.3
 
-    var shadowRadius: CGFloat = 2
+    var shadowRadius: CGFloat = 2.0
 
     var shadowColor: UIColor = UIColor(red: 25.0/255.0, green: 206.0/255.0, blue: 251.0/255.0, alpha: 0.5)
 
-    var shadowOffsetWidth: CGFloat = 1
+    var shadowOffsetWidth: CGFloat = 1.0
 
-    var shadowOffsetHeight: CGFloat = 2
+    var shadowOffsetHeight: CGFloat = 2.0
 
     private(set) lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()

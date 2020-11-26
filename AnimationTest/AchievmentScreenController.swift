@@ -20,7 +20,12 @@ class AchievmentScreenController: UIViewController {
     @IBOutlet weak var cnstrImageHeight: NSLayoutConstraint!
     private var objEmitterCell = CAEmitterCell()
     private let particleEmitter = CAEmitterLayer()
-    private var timer : Timer?
+    private var timer: Timer?
+    
+    private let imgInitialAchievmentWidth: CGFloat = 60.0
+    private let imgInitialAchievmentHeight: CGFloat = 60.0
+    private let imgFinalAchievmentWidth: CGFloat = 120.0
+    private let imgFinalAchievmentHeight: CGFloat = 120.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +35,8 @@ class AchievmentScreenController: UIViewController {
     }
 
     @IBAction func btnUnlockAchivement(_ sender: Any) {
-        self.cnstrImageWidth.constant = 60
-        self.cnstrImageHeight.constant  = 60
+        self.cnstrImageWidth.constant = imgInitialAchievmentWidth
+        self.cnstrImageHeight.constant  = imgInitialAchievmentHeight
         self.viwAchivement.alpha = 0.0
         self.viwAchivement.frame = self.view.frame
         self.lblAchivementUnlocked.isHidden = true
@@ -46,14 +51,20 @@ class AchievmentScreenController: UIViewController {
                 self.viwAchivement.alpha = 1.0
             }) { (completed) in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    UIView.transition(with: self.imgAchivment, duration: 1.0, options: ([.transitionFlipFromLeft]), animations: {
+                    UIView.transition(with: self.imgAchivment,
+                                      duration: 1.0,
+                                      options: ([.transitionFlipFromLeft]),
+                                      animations: {
                         self.viwAchivement.removeFromSuperview()
                     })
                 }
             }
-            self.cnstrImageWidth.constant = 120
-            self.cnstrImageHeight.constant  = 120
-            UIView.transition(with: self.imgAchivment, duration: 1.0, options: ([.transitionFlipFromLeft,.repeat]), animations: {
+            self.cnstrImageWidth.constant = self.imgFinalAchievmentWidth
+            self.cnstrImageHeight.constant  = self.imgFinalAchievmentHeight
+            UIView.transition(with: self.imgAchivment,
+                              duration: 1.0,
+                              options: ([.transitionFlipFromLeft,.repeat]),
+                              animations: {
             })
             UIView.animate(withDuration: 1.0, animations: {
                 self.view.layoutIfNeeded()
@@ -64,6 +75,8 @@ class AchievmentScreenController: UIViewController {
         })
     }
     
+    
+    /// This method is used to  show star particles to show achievments
     private func createParticles() {
         self.particleEmitter.emitterPosition = CGPoint(x: self.imgAchivment.center.x, y: self.imgAchivment.center.y)
         self.particleEmitter.emitterSize = CGSize(width: 0.5, height: 0.5)
@@ -76,14 +89,21 @@ class AchievmentScreenController: UIViewController {
         self.objEmitterCell.emissionRange = CGFloat.pi * 2
         self.objEmitterCell.scale = 0.5
         self.objEmitterCell.scaleSpeed = 0
-        self.objEmitterCell.contents = UIImage(named: "Star")?.cgImage
+        self.objEmitterCell.contents = UIImage(named:"Star")?.cgImage
         self.particleEmitter.emitterCells = [objEmitterCell]
         self.viwAchivement.subviews.first?.layer.insertSublayer(self.particleEmitter, below: self.imgAchivment.layer)
-        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(AchievmentScreenController.stopEmitterCell), userInfo: nil, repeats: false)
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0,
+                                          target: self,
+                                          selector: #selector(AchievmentScreenController.stopEmitterCell),
+                                          userInfo: nil,
+                                          repeats: false)
     }
-    @objc func stopEmitterCell(){
-        objEmitterCell.birthRate = 0
-        objEmitterCell.lifetime = 0
+    
+    
+    /// This method stops star particles.
+    @objc private func stopEmitterCell() {
+        objEmitterCell.birthRate = 0.0
+        objEmitterCell.lifetime = 0.0
         self.particleEmitter.removeFromSuperlayer()
         self.lblAchivementUnlocked.isHidden = false
         self.lblBullseye.isHidden = false
